@@ -1,0 +1,16 @@
+struct Info {
+    liquidity_gross: u128
+    liquidity_net: u128
+    fee_growth_outside0_x_128: u256
+    fee_growth_outside1_x_128: u256
+    tick_cumulative_outside: i64
+    seconds_per_liquidity_outside_x_128: u256
+    seconds_outside: u32
+    initialized: bool
+}
+
+contract Tick {
+    fn tick_spacing_to_max_liquidity_per_tick(tick_spacing: i32) -> u128 {
+        return 123
+    }
+}
