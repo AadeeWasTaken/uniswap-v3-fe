@@ -1,0 +1,40 @@
+struct Slot0 {
+    // the current price
+    pub sqrt_price_x_96: u256
+    // the current tick
+    pub tick: i32
+    // most recently updated index
+    pub observation_index: u16
+    // the next maximum number of observations to store, triggered in observations.write
+    pub observation_cardinality_next: u16
+    // the current protocol fee as a percentage of the swap fee taken on withdrawal
+    // represented as an integer denominator (1/x)%
+    pub fee_protocol: u8
+    // whether the pool is locked
+    pub unlocked: bool
+}
+
+struct ProtocolFees {
+    token0: u128
+    token1: u128
+}
+
+contract Pool {
+    factory: address
+    token0: address
+    token1: address
+    fee: u32
+    tick_spacing: i32
+    max_liquidity_per_tick: u128
+    
+    // pool state
+    slot0: Slot0
+
+    fee_growth_global0_x_128: u256
+    fee_growth_global1_x_128: u256
+
+    protocol_fees: ProtocolFees
+    liquidity: u128
+
+    
+}
