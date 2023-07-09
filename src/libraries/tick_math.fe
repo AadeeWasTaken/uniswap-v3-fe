@@ -1,7 +1,9 @@
+use std::evm::*
+
 const MIN_TICK: i256 = -887272
 const MAX_TICK: i256 = -MIN_TICK
-const MIN_SQRT_RATIO: i256 = 4295128739
-const MAX_SQRT_RATIO: i256 = 1461446703485210103287273052203988822378723970342
+const MIN_SQRT_RATIO: u256 = 4295128739
+const MAX_SQRT_RATIO: u256 = 1461446703485210103287273052203988822378723970342
 
 const MAX_U256: u256 = 2**256 - 1
 
@@ -83,7 +85,143 @@ contract TickMath {
 
         let ratio: u256 = sqrt_price_x_96 << 32
 
-        let r: u256 = ratio
-        let msb: u256 = 0
+        let mut r: u256 = ratio
+        let mut msb: u256 = 0
+
+        unsafe {
+            let f: u256 = shl(bits: 7, value: gt(r, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF))
+            msb = bitwise_or(msb, f)
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            let f: u256 = shl(bits: 6, value: gt(r, 0xFFFFFFFFFFFFFFFF))
+            msb = bitwise_or(msb, f)
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            let f: u256  = shl(bits: 5, value: gt(r, 0xFFFFFFFF))
+            msb = bitwise_or(msb, f)
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            let f: u256 = shl(bits: 4, value: gt(r, 0xFFFF))
+            msb = bitwise_or(msb, f)
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            let f: u256 = shl(bits: 3, value: gt(r, 0xFF))
+            msb = bitwise_or(msb, f)
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            let f: u256 = shl(bits: 2, value: gt(r, 0xF))
+            msb = bitwise_or(msb, f)
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            let f: u256 = shl(bits: 1, value: gt(r, 0x3))
+            msb = bitwise_or(msb, f)
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            let f: u256 = gt(r, 0x1)
+            msb = bitwise_or(msb, f)
+        }
+
+        if msb >= 128 {r=ratio >> (msb - 127)} 
+        else {r=ratio << (127 - msb)}
+
+        let mut log_2: u256 = 0
+
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 63, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 62, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 61, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 60, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 59, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 58, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 57, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 56, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 55, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 54, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 53, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 52, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 51, value: f))
+            r = shr(bits: f, value: r)
+        }
+        unsafe {
+            r = shr(bits: 127, value: mul(r, r))
+            let f: u256 = shr(bits: 128, value: r)
+            log_2 = bitwise_or(log_2, shl(bits: 50, value: f))
+        }
+
+        let log_sqrt10001: i256 = i256(log_2) * 255738958999603826347141
+
+        let tick_low: i256 = (log_sqrt10001 - 3402992956809132418596140100660247210) >> 128
+        let tick_high: i256 = (log_sqrt10001 + 291339464771989622907027621153398088495) >> 128
+
+        return tick_low if tick_low == tick_high else tick_high if get_sqrt_ratio_at_tick(tick: tick_high) <= sqrt_price_x_96 else tick_low
     }
 }
